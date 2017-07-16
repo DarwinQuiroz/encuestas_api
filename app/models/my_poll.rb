@@ -1,5 +1,6 @@
 class MyPoll < ApplicationRecord
   belongs_to :user
+  has_many :questions
 
   validates :title, presence: true, length: {in: 10..30}
   validates :description, presence: true, length: {in: 15..200}

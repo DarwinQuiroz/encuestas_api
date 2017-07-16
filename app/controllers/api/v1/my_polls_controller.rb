@@ -31,12 +31,7 @@ class Api::V1::MyPollsController < ApplicationController
 		render json: { message: "La encuesta fue eliminada.!" }
 	end
 	
-	protected
-		def authenticate_owner(owner)
-			if owner != @current_user
-				render json: { errors: "No tienes autorizado realiazar esta acción.!" }, status: :unauthorized	
-			end
-		end
+	
 
 	private
 		def my_polls_params
