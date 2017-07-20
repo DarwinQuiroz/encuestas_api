@@ -1,4 +1,4 @@
-class Api::V1::MyPollsController < ApplicationController
+class Api::V1::MyPollsController < Api::V1::MasterApiController
 	before_action :authenticate, only: [:create, :update, :destroy]
 	before_action :set_poll, only: [:show, :update, :destroy]
 	before_action(only: [:update, :destroy]) {|controlador| controlador.authenticate_owner(@poll.user)}
@@ -17,7 +17,8 @@ class Api::V1::MyPollsController < ApplicationController
 		if @poll.save
 			render "api/v1/my_polls/show", {formats: :json}
 		else
-			render json: { errors: @poll.errors.full_messages }, status: :unprocessable_entity
+			# render json: { errors: @poll.errors.full_messages }, status: :unprocessable_entity
+			error_array!(@poll.errors.full_messages, :unprocessable_entity)
 		end
 	end
 
@@ -34,6 +35,10 @@ class Api::V1::MyPollsController < ApplicationController
 	
 
 	private
+		def default_layout
+			'api/v1/application'
+		end
+
 		def my_polls_params
 			params.require(:poll).permit(:title, :description, :expires_at)
 		end

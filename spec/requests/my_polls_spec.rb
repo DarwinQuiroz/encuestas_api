@@ -11,7 +11,7 @@ RSpec.describe Api::V1::MyPollsController, type: :request do
 
 		it "deberia retornar la lista de encuestas" do
 			json = JSON.parse(response.body)
-			expect(json.length).to eq(MyPoll.count)
+			expect(json["data"].length).to eq(MyPoll.count)
 		end
 	end 
 
@@ -25,12 +25,12 @@ RSpec.describe Api::V1::MyPollsController, type: :request do
 
 		it "manda la encuesta solicitada" do
 			json = JSON.parse(response.body)
-			expect(json["id"]).to eq(@poll.id)
+			expect(json["data"]["attributes"]["id"]).to eq(@poll.id)
 		end
 
 		it "manda los atributus de la encuesta" do
 			json = JSON.parse(response.body)
-			expect(json.keys).to contain_exactly("id", "title", "description", "user_id", "expires_at")
+			expect(json["data"]["attributes"].keys).to contain_exactly("id", "title", "description", "user_id", "expires_at", "created_at", "updated_at")
 		end
 	end
 
@@ -51,7 +51,7 @@ RSpec.describe Api::V1::MyPollsController, type: :request do
 			it "responde con la encuesta creada" do
 				json = JSON.parse(response.body)
 				# puts "\n\n ---- #{json} ---- \n\n"
-				expect(json["title"]).to eq("Hola mundoooo")
+				expect(json["data"]["attributes"]["title"]).to eq("Hola mundoooo")
 			end
 		end
 
@@ -73,7 +73,6 @@ RSpec.describe Api::V1::MyPollsController, type: :request do
 			
 			it "responde con los errores al guardar la encuesta" do
 				json = JSON.parse(response.body)
-				# puts "\n\n --- #{response.body} --- \n\n"
 				expect(json["errors"]).to_not be_nil
 			end
 		end
@@ -90,7 +89,7 @@ RSpec.describe Api::V1::MyPollsController, type: :request do
 
 			it "actualiza la encuesta indicada" do
 				json = JSON.parse(response.body)
-				expect(json["title"]).to eq("nuevo titulo")
+				expect(json["data"]["attributes"]["title"]).to eq("nuevo titulo")
 			end
 		end
 
